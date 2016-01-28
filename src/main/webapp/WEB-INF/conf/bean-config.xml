@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<!-- 공지사항 (옛 기본) 관련 been -->
+<bean id="boardService" class="com.hta.board.service.BoardServiceImpl"> 
+	<!--<property name="jdbcTemplate" ref="jdbcTemplate"></property>--><!-- setJdbcTemplate()함수 즉, name = jdbcTemplage에 ref=jdbcTemplate을 주입한다. -->
+</bean>															<!-- jdbcTemplate은 applicationContext.xml에서 bean에서 인스턴스를 생성해줬다. -->
+
+<bean class="com.hta.board.controller.ListController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService"></property><!--ListController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.board.controller.WriteController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService"></property><!--WriteController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.board.controller.ReadController">
+	<property name="boardService" ref="boardService"></property>
+</bean>
+
+<bean class="com.hta.board.controller.UpdateController">
+	<property name="boardService" ref="boardService"></property>
+</bean>
+
+<bean class="com.hta.board.controller.DeleteController">
+	<property name="boardService" ref="boardService"></property>
+</bean>
+
+<bean class="com.hta.board.controller.ReplyController">
+	<property name="boardService" ref="boardService"></property>
+</bean>
+
+<bean class="com.hta.board.controller.UploadController">
+	<property name="boardService" ref="boardService"></property>
+</bean>
+
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/><!-- 파일 업로드 -->
+
+
+
+<!-- 자유게시판 관련 been -->
+<bean id="boardService1" class="com.hta.freeboard.service.BoardServiceImpl"> 
+	<!--<property name="jdbcTemplate" ref="jdbcTemplate"></property>--><!-- setJdbcTemplate()함수 즉, name = jdbcTemplage에 ref=jdbcTemplate을 주입한다. -->
+</bean>															<!-- jdbcTemplate은 applicationContext.xml에서 bean에서 인스턴스를 생성해줬다. -->
+
+<bean class="com.hta.freeboard.controller.ListController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService1"></property><!--ListController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.freeboard.controller.WriteController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService1"></property><!--WriteController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.freeboard.controller.ReadController">
+	<property name="boardService" ref="boardService1"></property>
+</bean>
+
+<bean class="com.hta.freeboard.controller.UpdateController">
+	<property name="boardService" ref="boardService1"></property>
+</bean>
+
+<bean class="com.hta.freeboard.controller.DeleteController">
+	<property name="boardService" ref="boardService1"></property>
+</bean>
+
+<bean class="com.hta.freeboard.controller.ReplyController">
+	<property name="boardService" ref="boardService1"></property>
+</bean>
+
+
+
+
+<!-- Q&A게시판 관련 been -->
+<bean id="boardService2" class="com.hta.QandAboard.service.BoardServiceImpl"> 
+	<!--<property name="jdbcTemplate" ref="jdbcTemplate"></property>--><!-- setJdbcTemplate()함수 즉, name = jdbcTemplage에 ref=jdbcTemplate을 주입한다. -->
+</bean>															<!-- jdbcTemplate은 applicationContext.xml에서 bean에서 인스턴스를 생성해줬다. -->
+
+<bean class="com.hta.QandAboard.controller.ListController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService2"></property><!--ListController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.QandAboard.controller.WriteController"><!--인스턴스 생성, DefaultAnnotationHandlerMapping을 이용 -->
+	<property name="boardService" ref="boardService2"></property><!--WriteController에 setBoardService함수에 boardService(=dao)을 주입한다.  -->
+</bean>
+
+<bean class="com.hta.QandAboard.controller.ReadController">
+	<property name="boardService" ref="boardService2"></property>
+</bean>
+
+<bean class="com.hta.QandAboard.controller.UpdateController">
+	<property name="boardService" ref="boardService2"></property>
+</bean>
+
+<bean class="com.hta.QandAboard.controller.DeleteController">
+	<property name="boardService" ref="boardService2"></property>
+</bean>
+
+<bean class="com.hta.QandAboard.controller.ReplyController">
+	<property name="boardService" ref="boardService2"></property>
+</bean>
+
+
+
+
+<!-- 로그인 및 회원가입 관련 been -->
+<bean id="memberService" class="com.hta.member.service.MemberServiceImpl">
+</bean>
+
+<bean class="com.hta.member.controller.RegisterController"><!-- 여길 틀려서 고생했다 ㅜㅜㅜㅜㅜ -->
+	<property name="memberService" ref="memberService"></property>
+</bean>
+
+
+<bean class="com.hta.member.controller.MainController"></bean>
+
+<bean class="com.hta.member.controller.LoginController">
+	<property name="memberService" ref="memberService"></property>
+</bean>
+
+
+<bean class="com.hta.member.controller.LogoutController"></bean>
+
+<bean class="com.hta.member.controller.LoginChangePwController">
+	<property name="memberService" ref="memberService"></property>
+</bean>
+
+
+
+
+
+<!-- 스터디 룸 관련 been -->
+<bean id="studyroomService" class="com.hta.studyroom.service.StudyroomServiceImpl">
+</bean>															
+
+<bean class="com.hta.studyroom.controller.ReservationController">
+	<property name="studyroomService" ref="studyroomService"></property>
+</bean>
+
+<bean class="com.hta.studyroom.controller.DeleteReservationController">
+	<property name="studyroomService" ref="studyroomService"></property>
+</bean>
+
+<bean class="com.hta.studyroom.controller.SearchReservationController">
+	<property name="studyroomService" ref="studyroomService"></property>
+</bean>
+
+
+
+
+<!-- 책 예약 시스템 관련 been-->
+<bean id="bookService" class="com.hta.book.service.BookServiceImpl">
+
+</bean>
+
+
+<bean class="com.hta.book.controller.BookInputController">
+	<property name="bookService" ref="bookService"></property>
+</bean>
+<bean class="com.hta.book.controller.BookUpdateController">
+	<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookDeleteController">
+	<property name="bookService" ref="bookService"></property>
+</bean>
+
+
+<bean class="com.hta.book.controller.BookInfoController">
+	<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookConditionController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.RentalBookController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookReturnController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookResController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookResExtensionController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookManagerController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+<bean class="com.hta.book.controller.BookResDeleteController">
+<property name="bookService" ref="bookService"></property>
+</bean>
+
+
+</beans>

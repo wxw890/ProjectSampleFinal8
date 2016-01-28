@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"><!--내가 만든 커넥션 풀을 통해 DB를 연결환다. -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver" /><!-- 우리가 연결한 dB 정보를 가지고있다. dataSource -->
+		<property name="jdbcUrl" value="jdbc:mysql://localhost/projectdb?characterEncoding=utf-8" />
+		<property name="user" value="root" />
+		<property name="password" value="1111" />
+	</bean>
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"><!-- JdbcTemplate은 전형적인 스프링 JDBC 접근방법이고 가장 인기가 좋다.  -->
+		<property name="dataSource" ref="dataSource" /><!-- dataSource메소드에 dataSource 의존성 주입을 설정한다. -->
+	</bean>
+
+</beans>

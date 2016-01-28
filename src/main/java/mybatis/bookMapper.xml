@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- DOCTip을 가져옴,실제 DB를 설정하기 위해서 따옴 -->
+  <mapper namespace="mybatis.bookMapper"><!--네임스페이스는 보통 경로를 적어주면 된다. 또한 dao로 DB를 했던것을 이제는 xml로 DB를 하겠다는뜻 -->
+    <!-- 책 추가 -->
+   <insert id="bookinput" parameterType="BookDto"> 
+     insert into book(book_title,book_label,book_author,book_genre,book_imdate,book_isbn,
+              book_chunggu,book_res,book_img,book_status,book_loc) 
+         values(#{book_title},#{book_label},#{book_author},#{book_genre},now(),#{book_isbn},#{book_chunggu},
+         0,#{book_img},0,#{book_loc})
+     </insert>
+     <!-- 책 전체리스트 -->
+     <select id="booklist" resultType="BookDto">
+        select book_num, book_title, book_label,
+         book_author, book_isbn, book_imdate
+         from book
+     </select>
+     <!-- 책 정보 찾기 -->
+     <select id="findBynum" parameterType="int" resultType="BookDto"><!--객체일경우 객체타입지정, 정수일경우 정수타입지정 -->
+        select book_num, book_title, book_label,
+         book_author, book_isbn, book_genre, book_chunggu,
+         book_loc, book_img
+          from book where book_num=#{book_num}
+     </select>
+     <!-- 책 수정 -->
+     <update id="updatebook" parameterType="BookDto" >
+        update book set book_title=#{book_title}, book_loc=#{book_loc}, book_label=#{book_label},
+        book_author=#{book_author},book_genre=#{book_genre},book_isbn=#{book_isbn}, 
+        book_chunggu=#{book_chunggu},book_img=#{book_img}
+        where book_num=#{book_num}
+     </update>
+     <!-- 오늘 추가한 책 데이터 리스트 -->
+      <select id="todaybooklist" resultType="BookDto"><!--따로 +를 해줄필요가 없으며 자유롭게 select할 sql문을 사용하면 된다. resultType(보내는 역할)는 밑에 sql문이 DB를 통해 결과를 가져오면 Dto에 다시 값을 보내야하기 때문에 사용한다.(즉 return타입) -->
+        select book_title, book_label,
+         book_author  from book where book_imdate=CURRENT_DATE()
+        </select>
+     <!-- 책 삭제 -->   
+     <delete id="deletebook" parameterType="int"  >
+        delete from book where book_num=#{book_num}
+     </delete>
+ 
+     <!-- 대여정보 -->
+     <select id="samelist" resultType="BookDto">
+  select  book_num, book_title, book_label,
+         book_author, book_isbn, book_status, book_res
+        from book where book_title=#{book_title};
+     </select>
+  <!-- 책 조건검색 -->
+     <select id="condition1"  parameterType="ConditionDto" resultType="BookDto">
+        select book_num, book_title, book_label,
+         book_author, book_isbn, book_imdate, book_genre , book_img
+         from book where ${item} like concat ('%',#{value},'%') 
+         group by book_title
+          having count(*) > 0
+     </select>
+     <!-- 책 조건검색 -->
+     <select id="condition2"  parameterType="ConditionDto" resultType="BookDto"><!--따로 +를 해줄필요가 없으며 자유롭게 select할 sql문을 사용하면 된다. resultType(보내는 역할)는 밑에 sql문이 DB를 통해 결과를 가져오면 Dto에 다시 값을 보내야하기 때문에 사용한다.(즉 return타입) -->
+        select book_num, book_title, book_label,
+         book_author, book_isbn, book_imdate, book_genre, book_img
+          from book where ${item} like concat ('%',#{value},'%') 
+        ${op} ${seconditem} like concat ('%',#{secondvalue},'%') 
+         group by book_title
+          having count(*) > 0
+     </select>
+     <!-- 책 조건검색 -->
+     <select id="condition3"  parameterType="ConditionDto" resultType="BookDto"><!--따로 +를 해줄필요가 없으며 자유롭게 select할 sql문을 사용하면 된다. resultType(보내는 역할)는 밑에 sql문이 DB를 통해 결과를 가져오면 Dto에 다시 값을 보내야하기 때문에 사용한다.(즉 return타입) -->
+        select book_num, book_title, book_label,
+         book_author, book_isbn, book_imdate, book_genre, book_img
+          from book where ${item} like concat ('%',#{value},'%') 
+        ${op} ${seconditem} like concat ('%',#{secondvalue},'%') 
+        ${secondop} ${thirditem} like concat ('%',#{thirdvalue},'%')
+         group by book_title
+          having count(*) > 0
+     </select>
+     
+     <!-- 책 정보 대여상태 1로 변경 -->
+     <update id="rentalbook" parameterType="BookDto">
+        update book set book_status=1 where book_num=#{book_num}
+     </update>
+     
+     <!-- 대여 책 정보 추가 -->
+     <insert id="rentalinfo" parameterType="RentalInfoDto" >
+        insert into rentalinfo(rental_date,renbtal_returndate,rental_extension,book_num,member_email) 
+        value(now(), NOW() + INTERVAL 3 DAY ,0,#{book_num},#{member_email}) 
+     </insert>
+     <!-- 회원이 지금 대여한 리스트 -->
+    <select id="mylist" resultType="BookandRentalDto" >
+       select book.book_num, book.book_title,
+      rentalinfo.rental_date, rentalinfo.renbtal_returndate,
+      GREATEST(day(now())-DAY(rentalinfo.renbtal_returndate), 0) overdate,
+        GREATEST(500*(day(now())-DAY(rentalinfo.renbtal_returndate)), 0) return_sal,
+       rentalinfo.rental_num, book.book_res
+        from rentalinfo left join book   
+       on rentalinfo.book_num = book.book_num 
+        left join member on rentalinfo.member_email = member.member_email
+        where 
+       member.member_email=#{member_email} and book.book_status=1
+       group by book_title
+          having count(*) > 0;
+    </select>
+    <!-- 회원이 빌린 책 정보 -->
+    <select id="memorylist" resultType="BookandRentalDto" >
+       select book.book_num, book.book_title,
+      rentalinfo.rental_date, rentalinfo.rental_date,
+       book.book_genre
+        from rentalinfo left join book   
+       on rentalinfo.book_num = book.book_num 
+        left join member on rentalinfo.member_email = member.member_email
+        where 
+       member.member_email=#{member_email}
+       
+    </select>
+    
+    <!-- 대여 책 정보 반납일자 업데이트-->
+    <update id="bookreturn" parameterType="RentalInfoDto">
+        update rentalinfo set return_date=now() where rental_num=#{rental_num}
+   </update>   
+     
+     <!-- 책 대여상태 0로 변경 -->
+     <update id="bookreturnupdate" parameterType="BookDto">
+        update book set book_status=0 where book_num=#{book_num}
+     </update>
+     
+    <!-- 책 정보 예약상태 1로 변경 -->
+     <update id="bookresupdate" parameterType="BookDto">
+        update book set book_res=1
+         where book_num=#{book_num}  
+     </update>
+     <!-- 예약 책 추가 -->
+    <insert id="resinfo" parameterType="BookResDto" >
+        insert into bookres(book_num,member_email,res_date,res_end) 
+        value(#{book_num},#{member_email},now(),now() + INTERVAL 2 DAY) 
+     </insert>
+ 
+    <!-- 회원 예약 책 리스트 -->
+     <select id="myreslist" resultType="BookandRentalDto" >
+    select book.book_num, bookres.res_num, book.book_title, bookres.res_date,
+     bookres.res_end,  book.book_status
+     from bookres left join book   
+       on bookres.book_num = book.book_num 
+        left join member on bookres.member_email = member.member_email
+        where 
+       member.member_email=#{member_email} and book.book_res=1  
+        group by book_title
+          having count(*) > 0
+    </select>
+    <!-- 예약 책 정보 삭제 -->
+    <delete id="bookrescancel" parameterType="int">
+        delete from bookres where res_num=#{res_num}
+     </delete>
+     <!-- 책 예약 상태 0 -->
+     <update id="bookresend" parameterType="BookDto">
+        update book set book_res=0
+         where book_num=#{book_num}
+     </update>
+     
+     <!-- 대여 책 연장 -->
+     <update id="bookextension" parameterType="RentalInfoDto">
+        update rentalinfo set rental_extension=1, renbtal_returndate=now()+interval+3 day where book_num=#{book_num}
+     </update>
+     <!-- 관리자 책 대여 리스트 -->
+     <select id="rentallist" resultType="BookandRentalDto">
+         select book.book_num, book.book_title, rentalinfo.renbtal_returndate,
+        member.member_email, member.member_phonenumber  
+        from rentalinfo 
+      left join book on
+      rentalinfo.book_num = book.book_num 
+      left join member on 
+      rentalinfo.member_email = member.member_email
+      where book.book_status=1
+       GROUP BY book_title
+      HAVING COUNT(*) > 0 order by renbtal_returndate asc
+     </select>
+     <!-- 관리자 책 예약 리스트  -->
+     <select id="resbooklist" resultType="BookandRentalDto">
+        select book.book_num, book.book_title, bookres.res_end, member.member_email
+         from bookres
+      left join book on
+      bookres.book_num = book.book_num 
+      left join member on bookres.member_email = member.member_email
+      where book.book_res=1 
+       GROUP BY book_title
+      HAVING COUNT(*) > 0 order by res_end asc
+     </select>
+     <!-- 예약 종료일이 지난 책들 예약상태 0으로 -->
+      <update id="bookmanagerresend" parameterType="BookDto"><![CDATA[
+        update book set book_res=0
+         where book_num in(select book_num from bookres where res_end < now());
+     ]]>
+     </update>
+     <!-- 예약 종료일이 지난 책들 예약정보 삭제 -->
+      <delete id="bookmanagerrescancel" ><![CDATA[
+      delete from bookres where res_end < now();
+     ]]>
+     </delete>
+     
+     
+  </mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd"><!--mybatis 홈페이지에 따와야함, 즉 여기서는 DB연결 설정파일-->
+  <configuration>
+  
+  <properties resource="mybatis/db.properties"></properties><!-- db.properties에 설정값을 읽어온다. -->
+  
+  
+  <typeAliases><!-- 별명을 지어주는 것 -->
+  	<typeAlias type="com.hta.board.repository.BoardDto" alias="BoardDto"/>
+  	<typeAlias type="com.hta.member.repository.Member" alias="Member"/>
+  	<typeAlias type="com.hta.freeboard.repository.BoardDto" alias="BoardDto1"/>
+  	<typeAlias type="com.hta.QandAboard.repository.BoardDto" alias="BoardDto2"/>
+  	<typeAlias type="com.hta.studyroom.repository.StudyroomDto" alias="StudyroomDto" />
+  	<typeAlias type="com.hta.book.repository.BookDto" alias="BookDto"/>
+  	<typeAlias type="com.hta.book.repository.ConditionDto" alias="ConditionDto"/>
+    <typeAlias type="com.hta.book.repository.RentalInfoDto" alias="RentalInfoDto"/>
+    <typeAlias type="com.hta.book.repository.BookandRentalDto" alias="BookandRentalDto"/>
+    <typeAlias type="com.hta.book.repository.BookResDto" alias="BookResDto"/>
+    <typeAlias type="com.hta.board.repository.UploadDto" alias="UploadDto"/>
+  </typeAliases>
+  
+  <environments default="development"><!-- 여기서 바꿀때 release를 사용할지 development를 사용할지 선택하면 된다. -->
+  
+    <environment id="development"><!-- 실제 배포할 DB와 개발형DB를 나눠서 설정할수있다. -->
+      <transactionManager type="JDBC"/><!-- JDBC로 사용하겠다. -->
+      <dataSource type="POOLED"><!-- connection pool 방식으로 하겠다는 뜻 -->
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+    
+    
+    <environment id="release"><!-- 배포 버전 DB -->
+      <transactionManager type="JDBC"/><!-- JDBC로 사용하겠다. -->
+      <dataSource type="POOLED"><!-- connection pool 방식으로 하겠다는 뜻 -->
+        <property name="driver" value="com.oracle.jdbc.Driver"/>
+        <property name="url" value="jdbc:oracle://localhost/projectdb?characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="1111"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers><!-- 실제 DB작업을 위한 설정파일을 연결하는 부분이다. -->
+    <mapper resource="mybatis/boardMapper.xml"/><!-- 패키지이름/xml파일 이름 -->
+    <mapper resource="mybatis/memberMapper.xml"/><!-- 패키지이름/xml파일 이름 -->
+    <mapper resource="mybatis/freeboardMapper.xml"/><!-- 패키지이름/xml파일 이름 -->
+    <mapper resource="mybatis/QandAboardMapper.xml"/><!-- 패키지이름/xml파일 이름 -->
+    <mapper resource="mybatis/studyroomMapper.xml"/><!-- 패키지이름/xml파일 이름 -->
+    <mapper resource="mybatis/bookMapper.xml"/><!-- book sql문 -->
+  </mappers>
+  
+</configuration>

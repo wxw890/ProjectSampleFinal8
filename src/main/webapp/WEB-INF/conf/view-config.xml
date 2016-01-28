@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver"><!--따로 view를 관리할수 있다. -->
+	<property name="order" value="1"></property><!--ResourceBundleViewResolver는 InternalResourceViewResolver과 함께 사용할 수 있지만 HandlerMapping처럼 순서를 안정해도 돌아가는 것이 아닌 -->
+												<!--순서를 정해줘야한다. 이유는 ResourceBundleViewResolver는 자기가할 view가 없으면 바로 종료를 때려버리기 때문이다.그러므로 같이 사용할시 제일 첫번째로 항상 실행할수 있도록해줘야한다. -->
+	<property name="basename" value="bundleview"></property><!-- value는 내가 만든 경로설정파일인 bundelview.properties 이름이다. -->
+</bean>
+</beans>

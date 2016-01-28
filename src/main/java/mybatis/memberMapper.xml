@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- DOCTip을 가져옴,실제 DB를 설정하기 위해서 따옴 -->
+  <mapper namespace="mybatis.memberMapper"><!--네임스페이스는 보통 경로를 적어주면 된다. 또한 dao로 DB를 했던것을 이제는 xml로 DB를 하겠다는뜻 -->
+ 
+	<insert id="write2" parameterType="Member"><!-- sql문을 조금 고쳐줘야한다. 즉, ? 대신에 #{} 형식으로 바꿔주면 된다.(()안에 명은 기존 명같게 해준다.), parameterType(전달하는 역할)는 dto로 값을 전달받기위해서 사용된다. -->
+  		insert into MEMBER(member_email, member_password,
+		member_name, member_address, member_phonenumber) values(#{member_email},#{member_password}, #{member_name}, #{member_address}, #{member_phonenumber})
+  	</insert>
+  	
+  	<select id="selectByEmail" parameterType="String" resultType="Member"><!--parameterType(받아오는 값) Member는 alias(별명)를 설정해줬기때문에 경로 지정안해도됨 -->
+  		select * from MEMBER where member_email=#{member_email}
+  	</select>
+  	
+  <update id="update6" parameterType="Member">
+  		update MEMBER set member_password=#{member_password} where member_email=#{member_email}
+  </update>
+  
+  	
+  </mapper>

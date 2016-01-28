@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.1.9" icons="true">  
+  <object id="1" language="java" name="com.hta.board.controller.ListController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/ListController.java" binary="false" 
+    label="listController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>    
+    <execution id="2">      
+      <position height="84" width="0" x="0" y="78"/>    
+    </execution>    
+    <execution id="4">      
+      <position height="21" width="0" x="0" y="120"/>    
+    </execution>    
+    <execution id="5">      
+      <position height="63" width="0" x="0" y="219"/>    
+    </execution>  
+  </object>  
+  <object id="8" language="java" name="com.hta.board.controller.ReadController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/ReadController.java" binary="false" 
+    label="readController1" type="class" autoSize="true">    
+    <position height="0" width="0" x="0" y="0"/>    
+    <execution id="7">      
+      <position height="21" width="0" x="0" y="240"/>    
+    </execution>    
+    <execution id="9">      
+      <position height="84" width="0" x="0" y="266"/>    
+    </execution>    
+    <execution id="11">      
+      <position height="21" width="0" x="0" y="308"/>    
+    </execution>    
+    <execution id="12">      
+      <position height="84" width="0" x="0" y="122"/>    
+    </execution>    
+    <execution id="14">      
+      <position height="21" width="0" x="0" y="164"/>    
+    </execution>  
+  </object>  
+  <object id="15" language="java" name="com.hta.board.controller.WriteController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/WriteController.java" binary="false" 
+    label="writeController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>    
+    <execution id="16">      
+      <position height="84" width="0" x="0" y="185"/>    
+    </execution>    
+    <execution id="18">      
+      <position height="21" width="0" x="0" y="227"/>    
+    </execution>  
+  </object>  
+  <object id="19" language="java" name="com.hta.board.controller.UpdateController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/UpdateController.java" binary="false" 
+    label="updateController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>  
+  </object>  
+  <object id="20" language="java" name="com.hta.board.controller.UploadController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/UploadController.java" binary="false" 
+    label="uploadController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>  
+  </object>  
+  <object id="21" language="java" name="com.hta.board.controller.ReplyController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/ReplyController.java" binary="false" 
+    label="replyController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>  
+  </object>  
+  <object id="22" language="java" name="com.hta.board.controller.DeleteController" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/com/hta/board/controller/DeleteController.java" binary="false" 
+    label="deleteController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="154" y="0"/>  
+  </object>  
+  <object id="23" language="java" name="mybatis.BoardManager" project="ProjectSample2-master" 
+    file="/ProjectSample2-master/src/main/java/mybatis/BoardManager.java" binary="false" label="boardManager" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="604" y="0"/>  
+  </object>  
+  <message id="3" 
+    operation="pageHandler(javax.servlet.http.HttpSession,com.hta.board.repository.BoardDto,javax.servlet.http.HttpServletRequest,javax.servlet.http.HttpServletResponse):org.springframework.web.servlet.ModelAndView" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="6" operation="setBoardService(com.hta.board.service.BoardService):void" asynchronous="false">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </message>  
+  <message id="10" operation="setBoardService(com.hta.board.service.BoardService):void" asynchronous="false">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="13" operation="PageMove(javax.servlet.http.HttpSession,int):org.springframework.web.servlet.ModelAndView" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="14"/>  
+  </message>  
+  <message id="17" operation="pageHandler():java.lang.String" asynchronous="false">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="18"/>  
+  </message>
+</sequence-diagram>

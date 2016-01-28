@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"><!-- DOCTip을 가져옴,실제 DB를 설정하기 위해서 따옴 -->
+  <mapper namespace="mybatis.QandAboardMapper"><!--네임스페이스는 보통 경로를 적어주면 된다. 또한 dao로 DB를 했던것을 이제는 xml로 DB를 하겠다는뜻 -->
+  	
+  	<select id="getList2" resultType="BoardDto2" ><!--따로 +를 해줄필요가 없으며 자유롭게 select할 sql문을 사용하면 된다. resultType(보내는 역할)는 밑에 sql문이 DB를 통해 결과를 가져오면 Dto에 다시 값을 보내야하기 때문에 사용한다.(즉 return타입) -->
+  		
+  		select * from QandAboard
+  		order by pos
+  	
+  	
+  	</select>
+  	
+  	<select id="findKeyword2" resultType="BoardDto2" parameterType="BoardDto2">
+  		select * from QandAboard <where>
+  							<if test="keyField == 'b_writer'">
+  								b_writer like concat('%', #{keyWord}, '%') order by pos
+  							</if>
+  							<if test="keyField == 'b_title'">
+  								AND b_title like concat('%', #{keyWord}, '%') order by pos
+  							</if>
+  							<if test="keyField == 'b_content'">
+  								AND b_content like concat('%', #{keyWord}, '%') order by pos
+  							</if>
+  							</where>
+  						
+  	</select>
+  	
+  	<!-- Aliass를 통해 com.netsong7.board.repository.BoardDto를 BoardDto로 별명을 지워 줄여서 쓸수있다.  -->
+  	<insert id="write3" parameterType="BoardDto2"><!-- sql문을 조금 고쳐줘야한다. 즉, ? 대신에 #{} 형식으로 바꿔주면 된다.(()안에 명은 기존 명같게 해준다.), parameterType(전달하는 역할)는 dto로 값을 전달받기위해서 사용된다. -->
+  		insert into QandAboard(b_title, b_content, b_writer,
+		b_date, b_count, b_password, pos, depth) values(#{b_title},#{b_content},#{b_writer},now(),0,#{b_password}, 1, 1)
+  	</insert>
+  	
+  	<select id="findBySeq2" parameterType="int" resultType="BoardDto2"><!--객체일경우 객체타입지정, 정수일경우 정수타입지정 -->
+  		select * from QandAboard where b_num=#{b_num}
+  	</select>
+  	
+	<update id="update2" parameterType="BoardDto2">
+		update QandAboard set b_title=#{b_title}, b_content=#{b_content}, b_writer=#{b_writer} where b_num=#{b_num}
+	</update>
+	
+	<delete id="delete2" parameterType="int">
+  		delete from QandAboard where b_num=#{b_num}
+  	</delete>
+  	
+  	<insert id="writeReply2" parameterType="BoardDto2">
+  		insert into QandAboard(b_title, b_content, b_writer,
+		b_date, b_count, b_password, pos, depth) values(#{b_title},#{b_content},#{b_writer},now(),0,#{b_password}, #{pos}+1, #{depth}+1)
+  	</insert>
+  	
+  	<update id="posupdate2" parameterType="BoardDto2">
+  		update QandAboard set pos=pos+1 where pos>#{pos}
+  	</update>
+  	
+  	<update id="posupdateall2" parameterType="BoardDto2">
+  		update QandAboard set pos=pos+1 where pos>=#{pos}
+  	</update>
+  	
+  	<update id="increasecount2" parameterType="BoardDto2">
+  		update QandAboard set b_count=b_count+1 where b_num=#{b_num}
+  	</update>
+  	
+  </mapper>
