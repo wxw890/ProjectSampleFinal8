@@ -34,6 +34,11 @@ public class ReadController {
 		if(dto.getB_writer().equals(email)){
 			ModelAndView mav2 = new ModelAndView("/board/member_read");
 			boardService.increaseCount(dto);
+			
+			String content = dto.getB_content();//글 내용 불러오기
+			content = content.replace("\r\n","<br>");//글의 엔터(\r)를 <br>로 변환
+			dto.setB_content(content);//변환된 내용을 다시 집어넣음
+			
 			mav2.addObject("dto", dto);
 			System.out.println("1*****읽어들이는 이미지 파일이름"+dto.getFilename());
 			System.out.println("1*****읽어들이는 이미지 파일경로"+dto.getFilepath());

@@ -2,6 +2,8 @@ package com.hta.member.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -9,6 +11,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -28,9 +32,9 @@ import java.io.*;
 
 //로그인 컨트롤러
 @Controller
-public class LoginController {
+public class LoginController implements HttpSessionBindingListener {
 	private MemberService memberService;
-	
+	private static Hashtable<String, String> loginUsers = new Hashtable();
 	public void setMemberService(MemberService memberService) {
 		this.memberService = memberService;
 	}
@@ -53,7 +57,7 @@ public class LoginController {
 			resp.setContentType("text/html;charset=utf-8"); 
 			
 			String originalText = loginCommand.getPassword();//암호--->암호화안된 오리지날 암호
-            String key = loginCommand.getEmail();//이메일 --->여기선 키값으로...
+            String key = loginCommand.getEmail();//이메일 --->여기선 키값으로...또한 hashTable 키값으로 사용됨
             String en = Encrypt( originalText, key);//암호화
             String de = Decrypt( en, key);//복호화
             loginCommand.setPassword(en);//암호화 암호 저장
@@ -61,9 +65,19 @@ public class LoginController {
             System.out.println( "Original Text is " + originalText);
             System.out.println( "Encrypted Text is " + en );
             System.out.println( "Decrypted Text is " + de );
-			
-			
+            
+            
+            boolean logincomfirm = isUsing(loginCommand.getEmail());
+            if(logincomfirm==true){
+            	System.out.print("실행됨?????????????");
+            	return "login";
+            }
+            loginUsers.put(key, loginCommand.getEmail());//hashTable에 이메일(key)로  이메일(여기서 아이디)저장
+            session.setAttribute("loginUsersall", loginUsers);//세션으로 넘김 -->로그아웃을 할때 hashTable에 저장되있는 이메일값을 지우기위해서...
+            
 			Member result = memberService.authenticate(loginCommand.getEmail(), loginCommand.getPassword());//로그인할 이메일,비번 인증
+			
+			System.out.println("로그인상태:"+ logincomfirm);
 			System.out.println("로그인:"+loginCommand.getEmail());
 			if(result != null){ // 값이 null아닌경우
 				session.setAttribute("name", result.getMember_name()); //이름을 seesion에 저장 누가 로그인 성공했는지 이름을 출력하기위해서...세션으로 넘겨서 index에서 사용하게위해서 EL태크로
@@ -128,5 +142,45 @@ public class LoginController {
                byte [] results = cipher.doFinal(decoder.decodeBuffer(text));
                return new String(results,"UTF-8");
      }
+	 
+	 
+	 
+	 
+
+    
+    //중복 로그인 막기 위해 아이디 사용중인지 체크
+    public boolean isUsing(String userID)
+    {
+       boolean isUsing = false;//로그인 안됬을시
+        Enumeration e = loginUsers.keys();
+ 
+        String key = "";
+       while(e.hasMoreElements())
+        {	
+            key = (String)e.nextElement();
+            System.out.println("1.저장된 키값은요?>?"+ loginUsers.get(key));
+            System.out.println("2.저장된 키값은요?>?"+userID);
+            System.out.println("3.저장된 키값은요?>?"+key);
+           if(userID.equals(loginUsers.get(key)))
+          {
+                isUsing = true;
+         }
+       }
+        return isUsing;
+  }
+	 
+	 
+	 
+	 
+
+	public void valueBound(HttpSessionBindingEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void valueUnbound(HttpSessionBindingEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	 
 }

@@ -17,5 +17,6 @@
   		update MEMBER set member_password=#{member_password} where member_email=#{member_email}
   </update>
   
+
   	
   </mapper>
