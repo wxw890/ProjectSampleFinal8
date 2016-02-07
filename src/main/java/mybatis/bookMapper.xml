@@ -88,8 +88,8 @@
     <select id="mylist" resultType="BookandRentalDto" >
        select book.book_num, book.book_title,
       rentalinfo.rental_date, rentalinfo.renbtal_returndate,
-      GREATEST(day(now())-DAY(rentalinfo.renbtal_returndate), 0) overdate,
-        GREATEST(500*(day(now())-DAY(rentalinfo.renbtal_returndate)), 0) return_sal,
+      GREATEST(date(now())-date(rentalinfo.renbtal_returndate), 0) overdate,
+        GREATEST(500*(date(now())-date(rentalinfo.renbtal_returndate)), 0) return_sal,
        rentalinfo.rental_num, book.book_res
         from rentalinfo left join book   
        on rentalinfo.book_num = book.book_num 

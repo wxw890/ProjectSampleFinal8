@@ -67,17 +67,11 @@ public class LoginController implements HttpSessionBindingListener {
             System.out.println( "Decrypted Text is " + de );
             
             
-            boolean logincomfirm = isUsing(loginCommand.getEmail());
-            if(logincomfirm==true){
-            	System.out.print("실행됨?????????????");
-            	return "login";
-            }
-            loginUsers.put(key, loginCommand.getEmail());//hashTable에 이메일(key)로  이메일(여기서 아이디)저장
-            session.setAttribute("loginUsersall", loginUsers);//세션으로 넘김 -->로그아웃을 할때 hashTable에 저장되있는 이메일값을 지우기위해서...
+           
             
 			Member result = memberService.authenticate(loginCommand.getEmail(), loginCommand.getPassword());//로그인할 이메일,비번 인증
 			
-			System.out.println("로그인상태:"+ logincomfirm);
+			
 			System.out.println("로그인:"+loginCommand.getEmail());
 			if(result != null){ // 값이 null아닌경우
 				session.setAttribute("name", result.getMember_name()); //이름을 seesion에 저장 누가 로그인 성공했는지 이름을 출력하기위해서...세션으로 넘겨서 index에서 사용하게위해서 EL태크로
@@ -85,6 +79,15 @@ public class LoginController implements HttpSessionBindingListener {
 				System.out.println("로그인시 메일출력:"+result.getMember_email());
 				System.out.println("로그인시 이름출력:"+result.getMember_name());
 			}
+			
+			 	boolean logincomfirm = isUsing(loginCommand.getEmail());
+	            if(logincomfirm==true){
+	            	System.out.print("실행됨?????????????");
+	            	return "/member/login/loginForm2Error";
+	            }
+	            loginUsers.put(key, loginCommand.getEmail());//hashTable에 이메일(key)로  이메일(여기서 아이디)저장
+	            session.setAttribute("loginUsersall", loginUsers);//세션으로 넘김 -->로그아웃을 할때 hashTable에 저장되있는 이메일값을 지우기위해서...
+	            System.out.println("로그인상태:"+ logincomfirm);
 		}
 		catch(IdPasswordNotMachingException err){
 			PrintWriter out = resp.getWriter();     
